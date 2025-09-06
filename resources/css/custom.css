@@ -1,0 +1,561 @@
+/************************************************************
+ * BASE / UTILIDADES
+ ************************************************************/
+
+/* Respeta usuarios con “reduced motion” (accesibilidad) */
+@media (prefers-reduced-motion: reduce){
+  .marquee-track{ animation: none; transform: translateX(0); }
+  .reveal, .reveal::before, .reveal::after{
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/************************************************************
+ * MARQUEE (carrusel horizontal continuo) – opcional
+ * Puedes pasar duración con CSS var: --marquee-duration
+ ************************************************************/
+.marquee-track{
+  /* Duración editable con var() sin JS (independiente de data-duration) */
+  --marquee-duration: 28s;
+  width: max-content;
+  animation: marquee var(--marquee-duration) linear infinite;
+}
+@keyframes marquee{
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); } /* se mueve una “lista” completa */
+}
+
+/************************************************************
+ * BARRAS/CONTADORES – opcional
+ ************************************************************/
+.progress-bar { width: 0%; transition: width 2s ease-in-out; }
+.counter { font-variant-numeric: tabular-nums; }
+
+/* Arranca en 0; usa las variables ya gestionadas por JS (--duration, --delay) */
+.skill-bar{
+  width: 0%;
+  transition: width var(--duration, 2s) ease-in-out var(--delay, 0s);
+}
+
+
+/************************************************************
+ * SISTEMA REVEAL (estructura común para todas las animaciones)
+ * - .reveal arranca oculto y preparado
+ * - .reveal.is-inview se activa al entrar al viewport
+ * - Se respetan variables CSS:
+ *      --delay     -> se aplica como transition/animation-delay
+ *      --duration  -> opcional, sobrevierte la duración por defecto
+ ************************************************************/
+.reveal{
+  opacity: 0;
+  will-change: transform, opacity, filter, clip-path;
+}
+/* Estado visible genérico. Algunas variantes usan keyframes y no dependen de esto */
+.reveal.is-inview{ /* Intencionalmente vacío: cada animación define su transición/animación */ }
+
+/************************************************************
+ * 1) FADE + SLIDES (TRANSITIONS)
+ ************************************************************/
+/* 0. fade-in – solo opacidad, sin movimiento */
+.reveal[data-anim="fade-in"]{
+  opacity: 0;
+  transform: none !important;           /* evita herencias de transform */
+  transition-property: opacity;         /* solo opacidad */
+  transition-duration: var(--duration, .9s);
+  transition-timing-function: ease;
+  transition-delay: var(--delay, 0s);
+  will-change: opacity;                 /* no “sugiere” transform */
+}
+
+.reveal[data-anim="fade-in"].is-inview{
+  opacity: 1;
+  transform: none !important;           /* refuerzo por si acaso */
+}
+
+/* 1. fade-up – clásico para títulos/párrafos */
+.reveal[data-anim="fade-up"]{
+  transform: translateY(74px);
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="fade-up"].is-inview{ opacity: 1; transform: none; }
+
+/* 2. fade-down */
+.reveal[data-anim="fade-down"]{
+  transform: translateY(-74px);
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="fade-down"].is-inview{ opacity: 1; transform: none; }
+
+/* 3. fade-left */
+.reveal[data-anim="fade-left"]{
+  transform: translateX(-32px);
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="fade-left"].is-inview{ opacity: 1; transform: none; }
+
+/* 4. fade-right */
+.reveal[data-anim="fade-right"]{
+  transform: translateX(32px);
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="fade-right"].is-inview{ opacity: 1; transform: none; }
+
+/* 5. title-up – más teatral (easing elástico) */
+.reveal[data-anim="title-up"] {
+  opacity: 0;
+  transform: translateY(40px); /* punto de inicio */
+}
+
+.reveal[data-anim="title-up"].is-inview {
+  animation: titleUp var(--duration, 1s) cubic-bezier(.2,1,.3,1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes titleUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px); /* empieza más abajo */
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-20px); /* sube 30px por encima */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* vuelve a su posición final */
+  }
+}
+
+/* 6. subtitle-up – más sutil */
+.reveal[data-anim="subtitle-up"]{
+  transform: translateY(16px);
+  transition:
+    opacity var(--duration, .5s) ease,
+    transform var(--duration, .5s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="subtitle-up"].is-inview{ opacity: 1; transform: none; }
+
+/* 7. paragraph-fade – solo desvanecer */
+.reveal[data-anim="paragraph-fade"]{
+  transition: opacity var(--duration, .9s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="paragraph-fade"].is-inview{ opacity: 1; }
+
+/* 8. img-left – imágenes desde la izquierda */
+.reveal[data-anim="img-left"]{
+  opacity: 0;
+  transform: translateX(-48px) scale(1);
+}
+.reveal[data-anim="img-left"].is-inview{
+  animation: imgLeftThenScale var(--duration, 1.4s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes imgLeftThenScale{
+  0%   { opacity: 0; transform: translateX(-148px) scale(1); } /* empieza más a la izquierda */
+  50%  { opacity: 1; transform: translateY(0) translateX(80px)     scale(1); } /* llega a su sitio */
+  75%  { opacity: 1; transform: translateX(0)      scale(1.10); } /* zoom ligero */
+  100% { opacity: 1; transform: translateX(0)      scale(1); }    /* vuelve a normal */
+}
+
+/* 9. img-right – SECUENCIAL: slide primero, luego pequeño zoom y vuelta */
+.reveal[data-anim="img-right"]{
+  opacity: 0;
+  transform: translateX(48px) scale(1);
+}
+.reveal[data-anim="img-right"].is-inview{
+  animation: imgRightThenScale var(--duration, 1.4s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes imgRightThenScale{
+  0%   { opacity: 0; transform: translateX(148px) scale(1); }
+  50%  { opacity: 1; transform: translateX(0)  translateY(0px)   scale(1); }
+  75%  { opacity: 1; transform: translateX(0)     scale(1.10); }
+  100% { opacity: 1; transform: translateX(0)     scale(1); }
+}
+
+/************************************************************
+ * 2) SCALES (TRANSITIONS & KEYFRAMES)
+ ************************************************************/
+
+/* 10. scale-up – de 0.9 a 1 */
+.reveal[data-anim="scale-up"]{
+  transform: scale(.9);
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="scale-up"].is-inview{ opacity: 1; transform: scale(1); }
+
+/* 11. scale-pop – rebote 0.9 -> 1.1 -> 1 */
+.reveal[data-anim="scale-pop"]{ opacity: 0; transform: scale(.9); }
+.reveal[data-anim="scale-pop"].is-inview{
+  animation: scalePop var(--duration, .6s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes scalePop{
+  0%   { opacity: 0; transform: scale(.9); }
+  70%  { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* 12. zoom-in – acercamiento sutil + desplazamiento */
+.reveal[data-anim="zoom-in"]{
+  transform: translateY(14px) scale(.96);
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="zoom-in"].is-inview{ opacity: 1; transform: none; }
+
+/************************************************************
+ * 3) ROTACIONES / 3D
+ ************************************************************/
+
+/* 13. rotate-in – ligera rotación Z */
+.reveal[data-anim="rotate-in"]{
+  transform: translateY(20px) rotate(-3deg);
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+  transform-origin: 50% 60%;
+}
+.reveal[data-anim="rotate-in"].is-inview{ opacity: 1; transform: none; }
+
+/* 14. flip-up – giro 3D en X */
+.reveal[data-anim="flip-up"]{
+  transform: perspective(800px) rotateX(12deg) translateY(12px);
+  transition:
+    opacity var(--duration, .7s) ease,
+    transform var(--duration, .7s) ease;
+  transition-delay: var(--delay, 0s);
+  transform-origin: bottom;
+}
+.reveal[data-anim="flip-up"].is-inview{
+  opacity: 1;
+  transform: perspective(800px) rotateX(0) translateY(0);
+}
+
+/* 15. flip-left – giro 3D en Y */
+.reveal[data-anim="flip-left"]{
+  transform: perspective(800px) rotateY(-12deg) translateX(-12px);
+  transition:
+    opacity var(--duration, .7s) ease,
+    transform var(--duration, .7s) ease;
+  transition-delay: var(--delay, 0s);
+  transform-origin: left;
+}
+.reveal[data-anim="flip-left"].is-inview{
+  opacity: 1;
+  transform: perspective(800px) rotateY(0) translateX(0);
+}
+
+/* 21. flip-vertical-in – de canto (Y 90º) a normal */
+.reveal[data-anim="flip-vertical-in"]{
+  opacity: 0;
+  transform: perspective(800px) rotateY(90deg);
+  transform-origin: center;
+}
+.reveal[data-anim="flip-vertical-in"].is-inview{
+  animation: flipVerticalIn var(--duration, .8s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes flipVerticalIn{
+  0%   { opacity: 0; transform: perspective(800px) rotateY(90deg); }
+  60%  { opacity: 1; transform: perspective(800px) rotateY(-10deg); }
+  100% { opacity: 1; transform: perspective(800px) rotateY(0deg); }
+}
+
+
+/* 21b. flip-vertical-in-left – de canto (Y -90º) a normal */
+.reveal[data-anim="flip-vertical-in-right"] {
+  opacity: 0;
+  transform: perspective(800px) rotateY(-90deg);
+  transform-origin: center;
+}
+
+.reveal[data-anim="flip-vertical-in-right"].is-inview {
+  animation: flipVerticalInLeft var(--duration, .8s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes flipVerticalInLeft {
+  0%   { opacity: 0; transform: perspective(800px) rotateY(-90deg); }
+  60%  { opacity: 1; transform: perspective(800px) rotateY(10deg); }
+  100% { opacity: 1; transform: perspective(800px) rotateY(0deg); }
+}
+
+/* 22. flip-horizontal-in – de canto (X 90º) a normal */
+.reveal[data-anim="flip-horizontal-in"]{
+  opacity: 0;
+  transform: perspective(800px) rotateX(90deg);
+  transform-origin: center;
+}
+.reveal[data-anim="flip-horizontal-in"].is-inview{
+  animation: flipHorizontalIn var(--duration, .8s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes flipHorizontalIn{
+  0%   { opacity: 0; transform: perspective(800px) rotateX(90deg); }
+  60%  { opacity: 1; transform: perspective(800px) rotateX(-10deg); }
+  100% { opacity: 1; transform: perspective(800px) rotateX(0deg); }
+}
+
+/************************************************************
+ * 4) BLUR / FILTROS
+ ************************************************************/
+
+/* 16. blur-in – desenfocado a nítido */
+.reveal[data-anim="blur-in"]{
+  filter: blur(8px);
+  transform: translateY(10px);
+  transition:
+    opacity var(--duration, .6s) ease,
+    filter var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="blur-in"].is-inview{
+  opacity: 1; filter: blur(0); transform: none;
+}
+
+/* 17. sharp-slide – contraste/saturación baja a normal + slide */
+.reveal[data-anim="sharp-slide"]{
+  filter: contrast(.85) saturate(.9);
+  transform: translateY(18px);
+  transition:
+    opacity var(--duration, .55s) ease,
+    filter var(--duration, .55s) ease,
+    transform var(--duration, .55s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="sharp-slide"].is-inview{
+  opacity: 1; filter: none; transform: none;
+}
+
+/************************************************************
+ * 5) CLIP/MASK
+ ************************************************************/
+
+/* 18. clip-up – revela con clip desde abajo */
+.reveal[data-anim="clip-up"]{
+  clip-path: inset(20% 0 0 0);
+  transition:
+    opacity var(--duration, .6s) ease,
+    clip-path var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="clip-up"].is-inview{
+  opacity: 1; clip-path: inset(0 0 0 0);
+}
+
+/* 19. wipe-right – escalaX desde la izquierda */
+.reveal[data-anim="wipe-right"]{
+  transform: scaleX(0.15);
+  transform-origin: left;
+  transition:
+    opacity var(--duration, 1.2s) ease,
+    transform var(--duration, 1.2s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="wipe-right"].is-inview{
+  opacity: 1; transform: scaleX(1);
+}
+
+/************************************************************
+ * 6) SKEW / TILT
+ ************************************************************/
+
+/* 20. skew-in – ligero sesgo que se corrige */
+.reveal[data-anim="skew-in"]{
+  transform: translateY(18px) skewY(4deg);
+  transform-origin: top left;
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="skew-in"].is-inview{
+  opacity: 1; transform: none;
+}
+
+/************************************************************
+ * 7) EFECTOS ESPECTACULARES EXTRA
+ ************************************************************/
+
+/* 23. text-gradient-sweep – gradiente animado que barre el texto */
+.reveal[data-anim="text-gradient-sweep"]{
+  background: linear-gradient(90deg, #9d8066, #5a5a6b, #9d8066);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: gradientSweep var(--duration, 1.2s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes gradientSweep{
+  0%   { background-position: 120% 0; opacity: 0; transform: translateY(10px); }
+  60%  { background-position: 50% 0;  opacity: 1; transform: translateY(0); }
+  100% { background-position: 0 0;    opacity: 1; }
+}
+
+/* 24. liquid-reveal – franja vertical que barre por encima
+   Personalizable con:
+   --color      -> color de la línea (se puede setear vía data-color en JS)
+   --line-width -> ancho de línea (por defecto 20px, setear vía data-line-width en JS)
+ */
+.reveal[data-anim="liquid-reveal"]{
+  position: relative;
+  overflow: hidden;
+  opacity: 1;       /* el botón/contenedor permanece visible */
+  transform: none;
+}
+.reveal[data-anim="liquid-reveal"]::before{
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  /* Arranca fuera por la izquierda (negativo del ancho) */
+  left: calc(var(--line-width, 20px) * -1);
+  width: var(--line-width, 20px);
+  background: var(--color, #9d8066);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transform: translateX(0);
+}
+.reveal[data-anim="liquid-reveal"].is-inview::before{
+  opacity: 1;
+  animation: liquidLine var(--duration, 1s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes liquidLine{
+  to { transform: translateX(120%); } /* cruza todo el ancho */
+}
+
+/* 25. shimmer – destello diagonal que cruza el elemento */
+.reveal[data-anim="shimmer"]{
+  position: relative; overflow: hidden; background:#fff; border-radius:16px;
+  transform: translateY(14px); opacity:0;
+  transition:
+    opacity var(--duration, .6s) ease,
+    transform var(--duration, .6s) ease;
+  transition-delay: var(--delay, 0s);
+}
+.reveal[data-anim="shimmer"].is-inview{ opacity:1; transform:none; }
+.reveal[data-anim="shimmer"]::after{
+  content:""; position:absolute; inset:-50% -20%;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.6) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: shimmerSweep var(--duration, 1s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes shimmerSweep{ to { transform: translateX(120%);} }
+
+/* 26. tilt3d-bounce – inclinación 3D con rebote */
+.reveal[data-anim="tilt3d-bounce"]{
+  transform: perspective(900px) rotateX(10deg) rotateY(-8deg) translateY(12px);
+  opacity:0;
+  animation: tiltBounce var(--duration, .9s) cubic-bezier(.2,1,.3,1) forwards;
+  animation-delay: var(--delay, 0s);
+  transform-origin: 50% 60%;
+}
+@keyframes tiltBounce{
+  0%   { opacity:0; transform: perspective(900px) rotateX(10deg) rotateY(-8deg) translateY(12px) scale(.98); }
+  60%  { opacity:1; transform: perspective(900px) rotateX(0) rotateY(0) translateY(0) scale(1.03); }
+  100% { opacity:1; transform: perspective(900px) rotateX(0) rotateY(0) translateY(0) scale(1); }
+}
+
+/* 27. turn-scale-left – ligera rotación a la izq + scale con rebote */
+.reveal[data-anim="turn-scale-left"]{
+  opacity: 0;
+  transform: rotateZ(var(--tilt, -6deg)) scale(.94) translateY(8px);
+  animation: none; /* <-- importante para poder resetear al salir */
+}
+
+.reveal[data-anim="turn-scale-left"].is-inview{
+  animation: turnScaleLeft var(--duration, .7s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes turnScaleLeft{
+  0%   { opacity: 0; transform: rotateZ(var(--tilt, -6deg)) scale(.94) translateY(8px); }
+  70%  { opacity: 1; transform: rotateZ(0deg)                 scale(1.10) translateY(0); }
+  100% { opacity: 1; transform: rotateZ(0deg)                 scale(1); }
+}
+
+/* 28. turn-scale-right – ligera rotación alterna + scale */
+.reveal[data-anim="turn-scale-right"]{
+  opacity: 0;
+  transform: rotateZ(var(--tilt, 6deg)) scale(.94) translateY(8px);
+  animation: none; /* <-- importante para poder resetear al salir */
+}
+
+.reveal[data-anim="turn-scale-right"].is-inview{
+  animation: turnScaleRight var(--duration, .7s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes turnScaleRight{
+  0%   { opacity: 0; transform: rotateZ(var(--tilt, 6deg)) scale(.94) translateY(8px); }
+  70%  { opacity: 1; transform: rotateZ(0deg)                 scale(1.10) translateY(0); }
+  100% { opacity: 1; transform: rotateZ(0deg)                 scale(1); }
+}
+
+/* 28. split-reveal – dos tapas (arriba/abajo) que se abren */
+.reveal[data-anim="split-reveal"]{
+  position: relative; overflow: hidden; background:#fff; border-radius:14px;
+  opacity:1; /* el contenido puede estar visible, cubierto por las tapas */
+}
+.reveal[data-anim="split-reveal"]::before,
+.reveal[data-anim="split-reveal"]::after{
+  content:""; position:absolute; left:0; right:0; background:#e8ddd4;
+}
+.reveal[data-anim="split-reveal"]::before{ top:0;    height:50%; transform: translateY(0); }
+.reveal[data-anim="split-reveal"]::after { bottom:0; height:50%; transform: translateY(0); }
+.reveal[data-anim="split-reveal"].is-inview::before{
+  animation: splitUp var(--duration, .8s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+.reveal[data-anim="split-reveal"].is-inview::after{
+  animation: splitDown var(--duration, .8s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes splitUp  { to { transform: translateY(-100%);} }
+@keyframes splitDown{ to { transform: translateY(100%);} }
+
+
+/* 29. bounce-up – sube 100px y regresa */
+.reveal[data-anim="bounce-up"]{
+  opacity: 1; /* esta animación arranca visible */
+}
+.reveal[data-anim="bounce-up"].is-inview{
+  animation: bounceUp var(--duration, 1s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes bounceUp{
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-60px); } /* sube 100px */
+  100% { transform: translateY(0); }      /* vuelve a su posición */
+}

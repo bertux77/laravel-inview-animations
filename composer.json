@@ -1,0 +1,42 @@
+{
+  "name": "bertux77/laravel-inview-animations",
+  "description": "Laravel Inview Animations: animaciones personalizadas con IntersectionObserver.",
+  "keywords": [
+    "laravel",
+    "animations",
+    "scroll",
+    "intersectionobserver",
+    "css"
+  ],
+  "type": "laravel-package",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alberto Carrión",
+      "email": "info@albertofreelance.com",
+      "homepage": "https://albertofreelance.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "AlbertoFreelance\\InViewAnimations\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "AlbertoFreelance\\InViewAnimations\\InViewAnimationsServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "support": {
+    "issues": "https://github.com/bertux77/laravel-inview-animations",
+    "source": "https://github.com/bertux77/laravel-inview-animations"
+  }
+}
