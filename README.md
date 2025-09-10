@@ -17,7 +17,7 @@ Ideal para landing pages, portfolios o dashboards que necesitan ese **toque de v
 ## ⚡ Instalación
 
 ```bash
-composer require bertux77/inview-animations
+composer require bertux77/laravel-inview-animations
 php artisan vendor:publish --tag=inview-animations-assets
 php artisan vendor:publish --tag=inview-animations-config
 ```
