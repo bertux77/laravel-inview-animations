@@ -8,13 +8,13 @@ Incluye un sistema de `reveal` para entradas dinámicas, contadores numéricos y
 Ideal para landing pages, portfolios o dashboards que necesitan ese **toque de vida** sin sobrecargar el frontend.
 
 ---
-## 🚀 Demo en vivo
+## 👀 Demo en vivo
 
 👉 Mira todas las animaciones en acción en la web oficial:  
 [**Laravel Inview Animations – Demo Oficial**](https://albertofreelance.com/laravel-inview-animations)
 
 ---
-## 🚀 Instalación
+## ⚡ Instalación
 
 ```bash
 composer require bertux77/inview-animations
