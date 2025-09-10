@@ -8,7 +8,12 @@ Incluye un sistema de `reveal` para entradas dinámicas, contadores numéricos y
 Ideal para landing pages, portfolios o dashboards que necesitan ese **toque de vida** sin sobrecargar el frontend.
 
 ---
+## 🚀 Demo en vivo
 
+👉 Mira todas las animaciones en acción en la web oficial:  
+[**Laravel Inview Animations – Demo Oficial**](https://albertofreelance.com/laravel-inview-animations)
+
+---
 ## 🚀 Instalación
 
 ```bash
@@ -57,9 +62,9 @@ Algunas animaciones incluidas:
 - `split-reveal`, `bounce-up`
 
 ---
-# Animaciones especiales
+### Animaciones especiales
 
-## Animaciones para Gráficas (ADN Stack)
+## Animaciones para Gráficas
 
 Además de las animaciones de entrada (`fade`, `scale`, `flip`, etc.), este paquete incluye **animaciones dinámicas de gráficas** para tarjetas `.dna-card`.  
 Están pensadas para visualizar datos de forma creativa (anillos, mini-barras y barras lineales).
@@ -205,4 +210,4 @@ Se activan al entrar en pantalla y respetan `data-width`, `data-duration` y `dat
 
 ## 📝 Licencia
 
-MIT © 2025 – Creado con ❤️ por [Bertux77](https://albertofreelance.com)
+MIT © 2025 – Creado con ❤️ por [AlbertoFreelance](https://albertofreelance.com)
