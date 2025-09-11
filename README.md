@@ -172,29 +172,6 @@ Al entrar en pantalla, el número se incrementará automáticamente hasta el val
 
 ---
 
-## 📊 Skill Bars
-
-La nueva animación `skill-bar` te permite crear **barras de progreso animadas**.  
-Se activan al entrar en pantalla y respetan `data-width`, `data-duration` y `data-delay`.
-
-### Ejemplo:
-
-```html
-<div class="bg-beige-medium rounded-full h-3 reveal" data-anim="fade-in">
-  <div class="skill-bar bg-gradient-to-r from-slate-custom to-gray-dark h-3 rounded-full"
-       data-width="90"
-       data-duration="1.2"
-       data-delay="0.2"></div>
-</div>
-```
-
-👉 Explicación:
-- `data-width="90"` → la barra crecerá hasta el 90%.
-- `data-duration="1.2"` → animación de 1.2 segundos.
-- `data-delay="0.2"` → comienza 0.2 segundos después de entrar en pantalla.
-
----
-
 ## ⚙️ Atributos globales
 
 - `data-delay="0.3"` → retardo de inicio.
