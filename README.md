@@ -74,17 +74,26 @@ Están pensadas para visualizar datos de forma creativa (anillos, mini-barras y 
 Animación circular que muestra un porcentaje con trazo progresivo.
 
 ```html
-<article class="dna-card" data-type="ring" data-percent="85" data-duration="1200">
-  <svg viewBox="0 0 120 120" class="w-28 h-28">
-    <circle cx="60" cy="60" r="40" fill="none" stroke="#e8ddd4" stroke-width="12"/>
-    <circle class="ring-progress" cx="60" cy="60" r="40" fill="none"
-            stroke="url(#ringGrad1)" stroke-linecap="round" stroke-width="12"
-            stroke-dasharray="251" stroke-dashoffset="251"/>
-  </svg>
-  <h3>
-    <span class="count" data-target="85">0</span>% Creativo
-  </h3>
-</article>
+<section class="reveal" data-anim="fade-in" data-delay=".25" data-repeat="true">
+  <article class="dna-card" data-type="ring" data-percent="85" data-duration="1200">
+      <svg viewBox="0 0 120 120" class="w-28 h-28">
+      <defs>
+          <linearGradient id="ringGrad1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"  stop-color="#fed7aa"/><!-- orange-200 -->
+          <stop offset="100%" stop-color="#F97316"/><!-- orange-500 -->
+          </linearGradient>
+      </defs>
+
+      <!-- Pista -->
+      <circle cx="60" cy="60" r="40" fill="none" stroke="#e8ddd4" stroke-width="12"/>
+
+      <circle class="ring-progress"
+              cx="60" cy="60" r="40" fill="none"
+              stroke="url(#ringGrad1)" stroke-linecap="round" stroke-width="12"
+              stroke-dasharray="251" stroke-dashoffset="251"/>
+      </svg>
+  </article>
+</section>
 ```
 
 **Atributos disponibles**
@@ -100,16 +109,16 @@ Animación circular que muestra un porcentaje con trazo progresivo.
 Animación de barras verticales con efecto escalonado.
 
 ```html
-<article class="dna-card" data-type="bars" data-percent="70" data-duration="900">
-  <div class="h-20 w-40 flex items-end gap-2">
-    <div class="bar flex-1 bg-brown-light/30 rounded-t" style="height:10%"></div>
-    <div class="bar flex-1 bg-brown-light/30 rounded-t" style="height:10%"></div>
-    <div class="bar flex-1 bg-brown-light/30 rounded-t" style="height:10%"></div>
-  </div>
-  <h3>
-    <span class="count" data-target="70">0</span>% Inquieto
-  </h3>
-</article>
+<section class="reveal" data-anim="fade-in" data-delay=".25" data-repeat="true" >
+    <article class="dna-card" data-type="bars" data-percent="70" data-duration="1600">
+        <div class="h-20 w-40 flex items-end gap-2">
+            <div class="bar flex-1 bg-orange-300/60 rounded-t"></div>
+            <div class="bar flex-1 bg-orange-500/80 rounded-t"></div>
+            <div class="bar flex-1 bg-gray-900/60 rounded-t"></div>
+            <!-- Agrega tantas barras como quieras -->
+        </div>
+    </article>
+</section>
 ```
 
 **Atributos disponibles**
@@ -125,16 +134,14 @@ Animación de barras verticales con efecto escalonado.
 Animación de progreso horizontal con destello (`sparkle`) que recorre la barra.
 
 ```html
-<article class="dna-card" data-type="line" data-percent="100" data-duration="1200">
-  <div class="relative h-3 w-full bg-white rounded-full border overflow-hidden">
-    <div class="progress-line h-full w-0 rounded-full"
-         style="background: linear-gradient(90deg,#b8a08a,#9d8066,#d4c4b0)"></div>
-    <span class="sparkle absolute -left-2 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-beige-dark opacity-0"></span>
-  </div>
-  <h3>
-    <span class="count" data-target="100">0</span>% Perfeccionista
-  </h3>
-</article>
+<section class="reveal" data-anim="fade-in" data-delay=".25" data-repeat="true" >
+  <article class="dna-card" data-type="line" data-percent="70" data-duration="1200">
+      <div class="relative h-3 w-full bg-white rounded-full border overflow-hidden">
+          <div class="progress-line h-full w-0 rounded-full bg-gradient-to-r from-orange-300 via-orange-500 to-gray-900 "></div>
+          <span class="sparkle absolute -left-2 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-gray-900 opacity-0"></span>
+      </div>
+  </article>
+</section>
 ```
 
 **Atributos disponibles**
