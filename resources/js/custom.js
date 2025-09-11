@@ -229,8 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
      }, {
           root: null,
           rootMargin: '0px 0px -10% 0px',
-          // El threshold se elimina para un comportamiento más estable
-          // O se puede cambiar a 0 si es necesario
           threshold: 0
      });
 
